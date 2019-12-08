@@ -2,17 +2,23 @@
 #include <SDL2/SDL.h>
 
 int GRAPHICS_init(Graphics *graphics) {
-  graphics->window =
-      SDL_CreateWindow("SDL Game Engine", 50, 50, 640, 480, SDL_WINDOW_SHOWN);
+	if (!graphics->windowTitle)
+		graphics->windowTitle = "Game";
+	if (!graphics->width)
+		graphics->width = 640;
+	if (!graphics->height)
+		graphics->height = 480;
 
-  if (graphics->window == NULL) {
-    SDL_Log("Unable to create window: %s", SDL_GetError());
-    return 1;
-  }
+	graphics->window = SDL_CreateWindow(
+			graphics->windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+			graphics->width, graphics->height, SDL_WINDOW_SHOWN);
 
-  return 0;
+	if (graphics->window == NULL) {
+		SDL_Log("Unable to create window: %s", SDL_GetError());
+		return 1;
+	}
+
+	return 0;
 }
 
-void GRAPHICS_free(Graphics *graphics) {
-	SDL_DestroyWindow(graphics->window);
-}
+void GRAPHICS_free(Graphics *graphics) { SDL_DestroyWindow(graphics->window); }
